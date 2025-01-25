@@ -1,31 +1,36 @@
-import sys , json
+import sys
+import json
+import os
+import uuid
 
+file_path = "tasks.json"
 
+def loadTasks():
+    if not os.path.exists(file_path):
+        return []
+    with open(file_path, "r") as file:
+        try:
+            return json.load(file)
+        except json.JSONDecodeError:
+            return []
 
-def addlist(task_list, new_tasks):
-    """
-    Adds new tasks to the task list.
+def saveTasktoJson(tasks):
+    with open(file_path, "w") as file:
+        json.dump(tasks, file, indent=4)
 
-    Args:
-        task_list (list): The current list of tasks.
-        new_tasks (list): The new tasks to add.
+def addTask(tasknames):
+    tasks = loadTasks()
+    task = {
+        "id": str(uuid.uuid4()),
+        "name": tasknames,
+        "status": "not done"
+    }
+    tasks.append(task)
+    saveTasktoJson(tasks)
 
-    Returns:
-        list: The updated task list.
-    """
-    task_list.extend(new_tasks)
-    print(f"Tasks added successfully: {new_tasks}")
-    print("Current Tasks List:", task_list)
-
-
-    return task_list
-
-# Main Program
 if len(sys.argv) > 2 and sys.argv[1] == "add":
-    # Collect all tasks from the command-line arguments (skipping the script name and command)
-    new_tasks = sys.argv[2:]
-    tasks = addlist(tasks, new_tasks)
+    new_task_name = " ".join(sys.argv[2:])
+    addTask(new_task_name)
+    print(f"Task '{new_task_name}' added successfully.")
 else:
-    print("Usage: python script.py add <task1> <task2> ...")
-
-
+    print("Usage: python app.py add <task_name>")

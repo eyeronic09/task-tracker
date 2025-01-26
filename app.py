@@ -1,7 +1,6 @@
 import sys
 import json
 import os
-import uuid
 
 file_path = "tasks.json"
 
@@ -14,19 +13,24 @@ def loadTasks():
         except json.JSONDecodeError:
             return []
 
+def get_id(tasks):
+    return max((task["id"] for task in tasks), default=0) + 1
+
 def saveTasktoJson(tasks):
     with open(file_path, "w") as file:
         json.dump(tasks, file, indent=4)
 
 def addTask(tasknames):
+
     tasks = loadTasks()
     task = {
-        "id": str(uuid.uuid4()),
-        "name": tasknames,
-        "status": "not done"
+        "id":get_id(tasks),
+        "name": tasknames
     }
     tasks.append(task)
     saveTasktoJson(tasks)
+
+
 
 if len(sys.argv) > 2 and sys.argv[1] == "add":
     new_task_name = " ".join(sys.argv[2:])

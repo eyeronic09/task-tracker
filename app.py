@@ -3,7 +3,9 @@ import json
 import os
 
 file_path = "tasks.json"
-
+"""
+def loadTask just open the file and you can store or use it in variable 
+"""
 def loadTasks():
     if not os.path.exists(file_path):
         return []
@@ -13,16 +15,25 @@ def loadTasks():
         except json.JSONDecodeError:
             return []
 
-def updateTask(task_id , new_name):
+
+def updateTask(task_id, new_name):
     tasks = loadTasks()
+    task_found = False
+
+    # Iterate over tasks and update the one with the matching ID
     for task in tasks:
         if task["id"] == task_id:
             task["name"] = new_name
-            saveTasktoJson(task)
-            print(f"Task ID {task_id} updated successfully to '{new_name}'.")
-            return
-    print(f"Task ID not {task_id} found")
-            
+            task_found = True
+            break  # Exit loop after updating the task
+
+
+    if task_found:
+        saveTasktoJson(tasks)  # Save all tasks back to the JSON file
+        print(f"Task ID {task_id} updated to '{new_name}'.")
+    else:
+        print(f"Task ID {task_id} not found.")
+           
 
 
 '''
@@ -51,4 +62,12 @@ def addTask(tasknames):
     tasks.append(task)
     saveTasktoJson(tasks)
 
-
+if len (sys.argv) > 1 :
+    command = sys.argv[1]
+    if command == "add" and len(sys.argv)>2:
+        taskname = " ".join(sys.argv[2:])
+        addTask(taskname)
+    elif command == "update" and len(sys.argv) > 3 and sys.argv[2].isnumeric:
+        task_id  = int(sys.argv[2])
+        new_name = " ".join(sys.argv[3:])
+        updateTask(task_id,new_name)

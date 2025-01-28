@@ -1,14 +1,11 @@
-[
-    {
-        "id": 1,
-        "name": "kerew ferrenweewjnd"
-    },
-    {
-        "id": 2,
-        "name": "fjdfgs"
-    },
-    {
-        "id": 3,
-        "name": "keroen ferterewe"
-    }
-]
+{
+    "tasks": [
+        {
+            "id": 1,
+            "name": "fix some code",
+            "status": "not done"
+        }
+    ],
+    "counter": 1
+}
+

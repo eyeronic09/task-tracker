@@ -1,6 +1,4 @@
-import sys  # Importing the sys module to handle command-line arguments
-import json  # Importing the json module to read and write JSON data
-import os  # Importing the os module to interact with the operating system
+import os , sys , json
 
 file_path = "tasks.json"  # Defining the path to the JSON file where tasks are stored
 
@@ -24,7 +22,7 @@ def addTask(tasknames):
     data = loadTasks()  # Load existing tasks
     tasks = data["tasks"]  # Get the list of tasks
     counter = data["counter"]  # Get the current counter value
-
+  
     new_task = {
         "id": counter + 1,  # Assign a new ID by incrementing the counter
         "name": tasknames,  # Set the task name

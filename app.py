@@ -1,5 +1,5 @@
 import sys
-import json
+import json , time
 import os
 
 file_path = "tasks.json"
@@ -21,11 +21,14 @@ def addTask(tasknames):
     data = loadTasks()
     tasks = data["tasks"]
     counter = data["counter"]
+    currentTimeAndDate = time.ctime()
     
     new_task = {
         "id": counter + 1,
         "name": tasknames,
-        "status": "not done"
+        "status": "not done",
+        "created Time" : currentTimeAndDate,
+        "last updated at" : currentTimeAndDate
     }
     tasks.append(new_task)
     data["counter"] = counter + 1
@@ -36,10 +39,12 @@ def updateTask(task_id, new_name):
     data = loadTasks()
     tasks = data["tasks"]
     task_found = False
+    lastUpdateTime = time.ctime()
 
     for task in tasks:
         if task["id"] == task_id:
             task["name"] = new_name
+            task["last updated at"] = lastUpdateTime
             task_found = True
             break
 
@@ -71,7 +76,7 @@ def listAll_task():
     tasks = data["tasks"]
     if tasks:
         for task in tasks:
-            print(f"task ID:{task["id"]} , task name {task["name"]} , task status {task["status"]} ")
+            print(f"Task ID: {task['id']}, Name: {task['name']}, Status: {task['status']}, Created: {task['created Time']}, Last Updated: {task['last updated at']}")
     else:
         print("no task found.")
 

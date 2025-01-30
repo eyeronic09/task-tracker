@@ -66,20 +66,43 @@ def tasksDelete(task_id):
     else:
         print(f"Task with ID {task_id} not found.")
 
-
-
-
-def listTasks():
+def listAll_task():
     data = loadTasks()
     tasks = data["tasks"]
     if tasks:
         for task in tasks:
-            print(f"task ID:{task["id"]} , task name {task["name"]} , task status{task["name"]} ")
+            print(f"task ID:{task["id"]} , task name {task["name"]} , task status {task["status"]} ")
     else:
         print("no task found.")
 
+def completedTask():
+    data = loadTasks()
+    tasks = data["tasks"]
+    if tasks :
+        for task in tasks:
+            if task["status"] == "done":
+                print(f"task status {task["status"]}")
+    else:
+        print("no task found")
 
-        
+def updateStatus(new_status, task_id):
+    data = loadTasks()
+    tasks = data["tasks"]
+    task_found = False
+
+    for task in tasks:
+        if task["id"] == task_id:
+            task["status"] = new_status
+            task_found = True
+            break
+    if task_found:
+        saveTasktoJson(data)
+        print(f"Task ID {task_id} updated to '{new_status}'.")
+    else:
+        print(f"Task ID {task_id} not found.")
+
+    
+
 # Handle CLI commands
 if len(sys.argv) > 1:
     command = sys.argv[1]
@@ -97,8 +120,16 @@ if len(sys.argv) > 1:
         task_id = int(sys.argv[2])
         tasksDelete(task_id)
 
-    elif command == "list":
-        listTasks()
+    elif command == "list" and len(sys.argv) == 2:
+        listAll_task()
+    
+    elif command == "list-Done" and len(sys.argv) == 2:
+        completedTask()
+    
+    elif command == "update-status" and len(sys.argv) > 2 and sys.argv[2].isnumeric():
+        task_id = int(sys.argv[2])
+        new_status = " ".join(sys.argv[3:])
+        updateStatus(new_status, task_id) 
 
     else:
         print("Invalid command or arguments.")
